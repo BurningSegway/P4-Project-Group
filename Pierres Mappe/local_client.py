@@ -2,7 +2,7 @@ import socket
 import cv2 as cv
 import numpy as np
 
-msgFromClient = "Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!"
+msgFromClient = "Dinx mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!Din mor!"
 bytesToSend = str.encode(msgFromClient)
 
 serverAddressPort = ("127.0.0.1", 20001)
