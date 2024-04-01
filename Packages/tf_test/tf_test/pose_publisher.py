@@ -55,10 +55,10 @@ class MinimalPublisher(Node):
         if self.ty < -1:
             self.ty = -1
         self.tz += random.uniform(-1, 1)
-        if self.ty > 1:
-            self.ty = 1
-        if self.ty < -1:
-            self.ty = -1
+        if self.tz > 1:
+            self.tz = 1
+        if self.tz < -1:
+            self.tz = -1
 
         self.qx = random.uniform(-1, 1)
         self.qy = random.uniform(-1, 1)
