@@ -1,7 +1,7 @@
 import socket 
 import xml.etree.ElementTree as ET
 
-HOST = "192.168.1.37"
+HOST = "192.168.1.34"
 PORT = 65432
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -15,22 +15,53 @@ with conn:
         if not data:
             break
         conn.sendall(data)
-        print(f"Server modtag: {data.decode()}")
+        data = data.decode()
+        root = ET.fromstring(data)
+        
+        name = str(root.find('name').text)
+        timestamp = float(root.find('time').text)
+        rotation = root.find('coordinate/rotation')
+        rot_e1 = float(rotation.find('e1').text)
+        rot_e2 = float(rotation.find('e2').text)
+        rot_e3 = float(rotation.find('e3').text)
+        rot_e4 = float(rotation.find('e4').text)
+        rot_bol = bool(rotation.find('condition').text)
+        translation = root.find('coordinate/translation')
+        trans_x = float(translation.find('x').text)
+        trans_y = float(translation.find('y').text)
+        trans_z = float(translation.find('z').text)
+        trans_bol = bool(translation.find('condition').text)
 
-root = ET.fromstring(data)
 
-string1 = root.find('name')
-string2 = root.find('time')
-rotation = root.find('coordinate/rotation')
-rot_x = rotation.find('x')
-rot_y = rotation.find('y')
-rot_z = rotation.find('z')
-rot_bol = rotation.find('condition')
-translation = root.find('coordinate/rotation')
-trans_x = translation.find('x')
-trans_y = translation.find('y')
-trans_z = translation.find('z')
-trans_bol = translation.find('condition')
+        print(name)
+        print(timestamp)
+        print(rot_e2)
+        print(trans_bol)
+        print(trans_x)
+        
+        #print(root.find('name').text)
+        #print(float(rot_x.text))
+
+
+        #print(f"server modtog: {data}")
+
+
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+
 
 
 
