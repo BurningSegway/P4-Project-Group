@@ -26,8 +26,32 @@ XML = """
 </data>
 """
 
+XML2 = """
+<data>
+    <name>data1</name>
+    <time>time</time>
+    <coordinate>
+        <Euler>
+            <e1>1.0</e1>
+            <e2>1.0</e2>
+            <e3>1.0</e3>
+            <e4>1.0</e4>
+            <condition>true</condition>
+        </rotation>
+        <translation>
+            <x>1.0</x>
+            <y>1.0</y>
+            <z>1.0</z>
+            <condition>true</condition>
+        </translation>
+    </coordinate>
+</data>
+"""
+
+
 
 root = ET.fromstring(XML)
+"""
 
 string1 = root.find('name')
 string2 = root.find('time')
@@ -41,6 +65,8 @@ trans_x = translation.find('x')
 trans_y = translation.find('y')
 trans_z = translation.find('z')
 trans_bol = translation.find('condition')
+"""
+
 #print( string, string, [[float, float, float]. bool], [[float, float, float]. bool] )
 #segmentName, 'has static rotation( EulerXYZ )', client.GetSegmentGlobalRotationEulerXYZ( subjectName, segmentName ), client.GetSegmentGlobalTranslation(subjectName, segmentName)
 def xmller(navn, time, rot, rot2, tran1, tran2):
