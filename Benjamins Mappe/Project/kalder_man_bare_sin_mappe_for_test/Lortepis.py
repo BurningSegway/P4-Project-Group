@@ -106,44 +106,37 @@ try:
     #Process and send the data to the other server
     while( True) :
         try:
-            print('tid: ',time.time())
             #get the latest frame from vicon
             client.UpdateFrame()
 
-            #få navne på de aktive objekter i trackeren og begynd så proccessen med at udskrive der pose og alt det for hvert object
-            subjectNames = client.GetSubjectNames()
-            #print("subject", subjectNames)
-            for subjectName in subjectNames:
-                #print( subjectName )
-                segmentNames = client.GetSegmentNames( subjectName )
-                #print("segment", segmentNames)
-                for segmentName in segmentNames:
-                    segmentChildren = client.GetSegmentChildren( subjectName, segmentName )        
+            #Get the name of the subjects and segments
+            subjectName = client.GetSubjectNames()
+            segmentName = client.GetSegmentNames( subjectName )       
                      
+            #get their postion
+            translation_values, T_frame_condition = client.GetSegmentGlobalTranslation(subjectName, segmentName)
+            Q_rotation_values,  QR_frame_condition = client.GetSegmentGlobalRotationQuaternion( subjectName, segmentName )
+            
+            #debugging
+            print('tid: ',time.time())
+            print(Q_rotation_values, QR_frame_condition)
+ 
+            
+            data_to_send = xmller(segmentName, str(time.time()), Q_rotation_values, QR_frame_condition, translation_values, T_frame_condition)
 
-                    rotation_values,  R_frame_condition = client.GetSegmentGlobalRotationEulerXYZ( subjectName, segmentName )
-                    translation_values, T_frame_condition = client.GetSegmentGlobalTranslation(subjectName, segmentName)
-                    Q_rotation_values,  QR_frame_condition = client.GetSegmentGlobalRotationQuaternion( subjectName, segmentName )
-                    print(Q_rotation_values, QR_frame_condition)
+            client_socket.sendall(data_to_send.encode())
 
-                     
-                    #print(client.GetSegmentGlobalTranslation(subjectName, segmentName))
-                     
-                    data_to_send = xmller(segmentName, str(time.time()), Q_rotation_values, QR_frame_condition, translation_values, T_frame_condition)
-
-                    client_socket.sendall(data_to_send.encode())
-
-                    data = client_socket.recv(1024)
-                    print(f"Recieved: {data}")
-                    time.sleep(0.01)
-                     
-                     
-                    #print( string, string, [[float, float, float]. bool], [[float, float, float]. bool] )
-                    #print( segmentName, 'has static rotation( EulerXYZ )', client.GetSegmentGlobalRotationEulerXYZ( subjectName, segmentName ), client.GetSegmentGlobalTranslation(subjectName, segmentName) )
-                    #data_to_send = "Hello" 
-                    #client_socket.send(data_to_send.encode())
-                    #data_to_send = segmentName, 'has static rotation( EulerXYZ )', client.GetSegmentGlobalRotationEulerXYZ( subjectName, segmentName ), client.GetSegmentGlobalTranslation(subjectName, segmentName) 
-                    #client_socket.send(data_to_send.encode()) 
+            data = client_socket.recv(1024)
+            print(f"Recieved: {data}")
+            time.sleep(0.01)
+                
+                
+            #print( string, string, [[float, float, float]. bool], [[float, float, float]. bool] )
+            #print( segmentName, 'has static rotation( EulerXYZ )', client.GetSegmentGlobalRotationEulerXYZ( subjectName, segmentName ), client.GetSegmentGlobalTranslation(subjectName, segmentName) )
+            #data_to_send = "Hello" 
+            #client_socket.send(data_to_send.encode())
+            #data_to_send = segmentName, 'has static rotation( EulerXYZ )', client.GetSegmentGlobalRotationEulerXYZ( subjectName, segmentName ), client.GetSegmentGlobalTranslation(subjectName, segmentName) 
+            #client_socket.send(data_to_send.encode()) 
                                    
 
         except ViconDataStream.DataStreamException as e:
