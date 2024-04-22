@@ -1,0 +1,19 @@
+
+<data>
+    <string1>data1<string1 />
+    <string2>data2<string2 />
+    <coordinate>
+        <rotation>
+            <x>1.0<x />
+            <y>1.0<y />
+            <z>1.0<z />
+            <condition>true<condition />
+        <rotation />
+        <translation>
+            <x>1.0<x />
+            <y>1.0<y />
+            <z>1.0<z />
+            <condition>true<condition />
+        <translation />
+    <coordinate />
+<data />
