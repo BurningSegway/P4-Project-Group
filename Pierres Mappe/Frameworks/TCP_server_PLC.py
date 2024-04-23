@@ -13,8 +13,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         while True:
             data = conn.recv(1024)
             data_corrected = data.split(b'.')
-            print(data_corrected)
             print(f"Received from PLC: {data_corrected[0]}")
             if not data:
                 break
-            conn.sendall(b'2')
+            conn.sendall(b'2000')
