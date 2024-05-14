@@ -11,14 +11,14 @@ class FramePublisher(Node):
         super().__init__('drone_pose_publisher')
 
         # Declare and acquire `turtlename` parameter
-        self.frame_name = "Drone"
+        self.frame_name = "drone_path"
 
         # Initialize the transform broadcaster
         self.tf_broadcaster = TransformBroadcaster(self)
 
         self.subscription = self.create_subscription(
             TransformStamped,
-            'drone/pose',
+            'drone/path',
             self.handle_drone_pose,
             1)
         self.subscription  # prevent unused variable warning

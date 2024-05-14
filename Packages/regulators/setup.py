@@ -1,8 +1,6 @@
 from setuptools import find_packages, setup
-import os
-from glob import glob
 
-package_name = 'vicon_interface'
+package_name = 'regulators'
 
 setup(
     name=package_name,
@@ -12,7 +10,6 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -23,9 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'drone_pose_pub = vicon_interface.drone_pose_publisher_old:main',
-            'pose_pub = vicon_interface.pose_publisher:main',
-            'tf_pub = vicon_interface.drone_tf_publisher:main'
+            'takeoff_pub = regulators.takeoff:main',
+            'z_controller = regulators.z_controller:main'
         ],
     },
 )

@@ -11,7 +11,7 @@ class MinimalPublisher(Node):
     def __init__(self):
         super().__init__('traj_publisher')
         self.frame_name = "drone"
-        self.publisher_ = self.create_publisher(TransformStamped, 'drone/pose', 10)
+        self.publisher_ = self.create_publisher(TransformStamped, 'drone/path', 10)
         timer_period = 0.01  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
@@ -23,7 +23,7 @@ class MinimalPublisher(Node):
 
         self.rot_finish = 0
 
-        #Avg. speed
+        #Avg. speed YOU DECIDE
         self.v = 0.1
 
         #Calc. distance
@@ -34,11 +34,9 @@ class MinimalPublisher(Node):
 
         #Number of steps in tf given frequency
         self.n = int(self.tf / timer_period)
+
         #Size or time in each segemnt of the interval
         self.dt = self.tf/self.n
-
-        self.time_step = timer_period/self.tf
-        print(f"Time step*: {self.time_step}")
 
         #Calc. constants
         self.a0 = [

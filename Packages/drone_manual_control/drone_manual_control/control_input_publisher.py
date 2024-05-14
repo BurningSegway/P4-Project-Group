@@ -57,12 +57,12 @@ class MinimalPublisher(Node):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_w]:
-            self.throttle = self.throttle + 50
+            self.throttle = self.throttle + 5 # husk at ændre den her tilbage til self.throttle + 5
             if self.throttle > 1000:
                 self.throttle = 1000
 
         if keys[pygame.K_s]:
-            self.throttle = self.throttle - 50
+            self.throttle = self.throttle - 10
             if self.throttle < 0:
                 self.throttle = 0
         
@@ -98,6 +98,8 @@ class MinimalPublisher(Node):
 
     def msg_callback(self):
         msg = Control()
+        temp = self.get_clock().now()
+        msg.stamp = temp.nanoseconds
         msg.roll = float(self.roll)
         msg.pitch = float(self.pitch)
         msg.throttle = float(self.throttle)
