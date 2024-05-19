@@ -21,8 +21,9 @@ setup(
     entry_points={
         'console_scripts': [
             'pose_pub = tf_test.pose_publisher:main',
-            'tf_pub = tf_test.tf_publisher:main',
-            'traj_pub = tf_test.trajectory_generator:main'
+            'path_pub = tf_test.path_tf_publisher:main',
+            'traj_pub = tf_test.trajectory_generator:main',
+            'drone_pose_pub = tf_test.drone_pose_publisher:main'
         ],
     },
 )

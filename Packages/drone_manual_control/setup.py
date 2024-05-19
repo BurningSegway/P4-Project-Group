@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'publisher = drone_manual_control.control_input_publisher:main'
+            'publisher = drone_manual_control.control_input_publisher:main',
+            'main_control = drone_manual_control.control_publisher:main'
         ],
     },
 )
