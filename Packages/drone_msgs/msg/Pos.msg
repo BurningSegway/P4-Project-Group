@@ -5,6 +5,7 @@ float64 e1
 float64 e2
 float64 e3
 float64 e4
+float64 yaw
 float64 vel_x
 float64 vel_y
 float64 vel_z

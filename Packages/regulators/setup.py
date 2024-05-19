@@ -1,4 +1,6 @@
 from setuptools import find_packages, setup
+import os
+from glob import glob
 
 package_name = 'regulators'
 
@@ -10,6 +12,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -21,7 +24,10 @@ setup(
     entry_points={
         'console_scripts': [
             'takeoff_pub = regulators.takeoff:main',
-            'z_controller = regulators.z_controller:main'
+            'z_controller = regulators.z_controller:main',
+            'yaw_controller = regulators.yaw_controller:main',
+            'x_controller = regulators.x_controller:main',
+            'y_controller = regulators.y_controller:main',
         ],
     },
 )

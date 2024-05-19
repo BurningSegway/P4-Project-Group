@@ -6,6 +6,7 @@ from drone_msgs.msg import Pos
 
 from tf2_ros import TransformBroadcaster
 import socket 
+import math
 import xml.etree.ElementTree as ET
              
 
@@ -20,9 +21,10 @@ class MinimalPublisher(Node):
         #self.timer = self.create_timer(timer_period, self.timer_callback)
         
         
+        self.get_logger().info("-|- waiting on connection -|-")
+
         
-        
-        HOST = "192.168.1.35"
+        HOST = "192.168.1.34"
         PORT = 65432
 
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -38,6 +40,8 @@ class MinimalPublisher(Node):
         self.rot_e2 = 0.0
         self.rot_e3 = 0.0
         self.rot_e4 = 0.0
+
+        self.yaw = 0.0
 
         self.vel_x = 0.0
         self.vel_y = 0.0
@@ -93,6 +97,8 @@ class MinimalPublisher(Node):
                 t.e3 = self.rot_e3
                 t.e4 = self.rot_e4
 
+                t.yaw = quat_2_yaw(self.rot_e1, self.rot_e2, self.rot_e3, self.rot_e4)
+
                 t.vel_x = self.vel_x
                 t.vel_y = self.vel_y
                 t.vel_z = self.vel_z
@@ -101,7 +107,13 @@ class MinimalPublisher(Node):
 
                 # Send the transformation
                 self.publisher_.publish(t)
-
+def quat_2_yaw(x, y, z, w):
+     
+        t3 = +2.0 * (w * z + x * y)
+        t4 = +1.0 - 2.0 * (y * y + z * z)
+        yaw_z = math.atan2(t3, t4)
+     
+        return yaw_z # in radians
 
 def main(args=None):
     rclpy.init(args=args)

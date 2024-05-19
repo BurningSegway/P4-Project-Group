@@ -31,6 +31,7 @@ find_package(rosidl_default_generators REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Pos.msg"
   "msg/Control.msg"
+  "msg/Goal.msg"
   DEPENDENCIES geometry_msgs builtin_interfaces std_msgs # Add packages that above messages depend on, in this case geometry_msgs for Sphere.msg
 )
 
