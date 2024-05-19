@@ -1,0 +1,89 @@
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+
+import csv
+import socket 
+import xml.etree.ElementTree as ET
+
+file_path = '/home/mew/data/data.txt'
+def parseXml(xml_string):
+        root = ET.fromstring(xml_string) 
+        dateTime = root.findtext('DateTime')
+        carrierID = root.findtext('CarrierID')
+        stationID = root.findtext('StationID')
+        carrierID = int(carrierID)
+        stationID = int(stationID)
+        return dateTime, carrierID, stationID
+
+def searchCSV(carrierID, stationID):
+    with open('/home/mew/data/procssing_times_table.csv','r') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=';')
+        for row in csv_reader:
+            row_elements = row[0].split(';')
+            #print(row_elements)
+            if row_elements[0] == carrierID:
+                print('match!')
+                print(row)
+                return row_elements[stationID]
+
+
+class MinimalPublisher(Node): 
+
+    def __init__(self):
+        super().__init__('minimal_publisher')
+        self.publisher_ = self.create_publisher(String, 'system/carrier/data', 10)
+        HOST = "172.20.66.86"
+        PORT = 65432
+        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.s.bind((HOST,PORT))
+        self.s.listen()
+        self.conn, self.addr = self.s.accept()
+    
+        self.timer_callback()
+
+
+    def timer_callback(self):
+        with self.conn:
+            print(f"connected to: {self.addr}")
+            while True:
+                data = self.conn.recv(1024)
+                if not data:
+                    break
+                #print(type(data))
+                #print(data)
+                data_decoded = data.decode('utf-8', errors='replace')
+                #print(data_decoded)
+                data_decoded = data_decoded.strip('\x00@')
+                data_decoded = data_decoded.strip('\x00')
+                #print(len(data_decoded))
+                #data_decoded = data_decoded[:143]
+                dateTime, carrierID, stationID = parseXml(data_decoded)
+                carrierID = f'Carrier#{carrierID}'
+                print(f"dateTime: {dateTime}, carrierID: {carrierID}, stationID: {stationID}")
+                processingTime = searchCSV(carrierID, stationID)
+                print('processing time:', processingTime)
+                ByteTime = processingTime.encode('utf-8')
+                print(ByteTime)
+                with open(file_path, 'a') as f:
+                    f.write(f"dateTime: {dateTime}, carrierID: {carrierID}, stationID: {stationID}\n")
+
+                self.conn.sendall(ByteTime)
+                
+
+def main(args=None):
+    rclpy.init(args=args)
+
+    pose_publisher = MinimalPublisher()
+
+    rclpy.spin(pose_publisher)
+
+    # Destroy the node explicitly
+    # (optional - otherwise it will be done automatically
+    # when the garbage collector destroys the node object)
+    pose_publisher.destroy_node()
+    rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()
