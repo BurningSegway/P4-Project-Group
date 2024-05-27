@@ -12,7 +12,7 @@ class MinimalSubscriber(Node):
             String,
             'system/carrier/data',
             self.listener_callback,
-            10)
+            10) #Make a subscriber, that subscribes to our custom topic.
         self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):
