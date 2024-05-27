@@ -44,6 +44,7 @@ class MinimalPublisher(Node):
 
 
     def timer_callback(self):
+        msg = String()
         with self.conn:
             print(f"connected to: {self.addr}")
             while True:
@@ -69,6 +70,8 @@ class MinimalPublisher(Node):
                     f.write(f"dateTime: {dateTime}, carrierID: {carrierID}, stationID: {stationID}\n")
 
                 self.conn.sendall(ByteTime)
+                msg.data = str(f"dateTime: {dateTime}, carrierID: {carrierID}, stationID: {stationID}\n")
+                self.publisher_.publish(msg)
                 
 
 def main(args=None):
