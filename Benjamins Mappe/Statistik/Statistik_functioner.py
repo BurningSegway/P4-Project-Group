@@ -243,21 +243,115 @@ def opgave_1_5():
 
 
 
-opgave_1_5()
+
+#opgave_1_5()
 
 
 
-def opgave_2_1():
-    print("hej")
+def opgave_2_3(opgave):
+    #Læs dataen
+    data = pd.read_csv("execution_times.csv")
+    #find keys
+    #print(data.keys())
+    #Ekstraher kolonnen med den relevante data
+    execution_data = data["execution_time"]
+
+    #Find gaussiske værdier
+    mean, variance, std_dev = mean_csv(execution_data)
+    #print(mean, variance, std_dev)
+
+    execution_data10 = execution_data[0:10]
+    execution_data1000 = execution_data[0:1000]
+    if opgave == 'a':
+        X10 = sum(execution_data10)
+        X1000 = sum(execution_data1000)
+        print('sum af X for n=10', X10)
+        print('sum af X for n=1000', X1000)
+    elif opgave == 'b':
+        plt.hist(execution_data, bins=50)
+        plt.axvline(x = 13.04978140, color = 'red',  label = 'mean n=1000')
+        plt.show()
+    elif opgave == 'd':
+        mean_10 = 13.35643168
+        mean_1000 = 13.04978140
+        Z = 1.96
+
+        perm = 0
+        for i in range(0, 10):
+            temp = (execution_data10[i] - mean_10)**2
+            perm += temp
+        n = 10
+        s_variance10 = 1/(n-1) * perm
+        #print(s_variance10)
+        CL10 = (Z*(s_variance10/math.sqrt(n)))
+        print('CL10 = (', mean_10-CL10 , ',', mean_10+CL10, ')')
+
+        perm = 0
+        for i in range(0,1000):
+            temp = (execution_data1000[i] - mean_1000)**2
+            perm += temp
+        n = 1000
+        s_variance1000 = 1/(n-1) * perm
+        #print(s_variance1000)
+        CL1000 = ((s_variance1000/math.sqrt(n)))
+        print('CL10000 = (', mean_1000-CL1000 , ',', mean_1000+CL1000, ')')
+    elif opgave == 'e':
+        print('lavet i maple')
 
 
+#opgave_2_3()
+def estimate_coef(x, y): 
+  # number of observations/points 
+  n = np.size(x) 
+  
+  # mean of x and y vector 
+  m_x = np.mean(x) 
+  m_y = np.mean(y) 
+  
+  # calculating cross-deviation and deviation about x 
+  SS_xy = np.sum(y*x) - n*m_y*m_x 
+  SS_xx = np.sum(x*x) - n*m_x*m_x 
+  
+  # calculating regression coefficients 
+  b_1 = SS_xy / SS_xx 
+  b_0 = m_y - b_1*m_x 
+  
+  return (b_0, b_1)
 
+def opgave_2_5(opgave):
+    x_i = [0.41, 0.46, 0.44, 0.47, 0.42, 0.39, 0.41, 0.44, 0.43, 0.44]
+    y_i = [1850, 2620, 2340, 2690, 2160, 1760, 2500, 2750, 2730, 3120]
 
+    np_x_i = np.asarray(x_i, dtype=np.float32)
+    np_y_i = np.asarray(y_i, dtype=np.float32)
 
+    b_0, b_1 = estimate_coef(np_x_i, np_y_i)
+    if opgave == 'b':
+        print('b_o =',b_0, 'b_1 =', b_1)
 
+    if opgave == 'c':
+        print(b_0+b_1*0.43)
+    y = []
+    for i in range(len(x_i)):
+        y_temp = b_0 + b_1 * x_i[i]
+        y.append(y_temp)
 
+    plt.scatter(x_i, y_i)
+    plt.plot(x_i, y)
+    plt.show()
 
+    if opgave == 'd':
+        error_temp = 0
+        error = []
+        n=10
+        for i in range(len(x_i)):
+            error_temp = (y_i[i]-(b_0+b_1*x_i[i]))
+            error.append(error_temp**2)
 
+        variance = (1/(n-2))*sum(error)
+        print(variance)
+
+opgave_2_5('d')
 
 
 
