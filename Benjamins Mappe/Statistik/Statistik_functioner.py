@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import math
-from scipy.stats import norm, binom
-from Stats_funcs import mean_csv,plt_Hist_norm,plt_PFD_GAUS,binomial_pmf, plt_Hist_relative, plt_Hist, sum_function
+from scipy.stats import norm, binom, t
+from Stats_funcs import mean_csv,plt_Hist_norm,plt_PFD_GAUS,binomial_pmf, plt_Hist_relative, plt_Hist, sum_function, Z_score, T_Test, estimate_coef
 #Functionsoversigt
 #mean_csv - plt_Hist - plt_Hist_norm - plt_Hist_relative - plt_PFD_GAUS - binomial_pmf - sum_function -
 
@@ -300,23 +300,7 @@ def opgave_2_3(opgave):
 
 
 #opgave_2_3()
-def estimate_coef(x, y): 
-  # number of observations/points 
-  n = np.size(x) 
-  
-  # mean of x and y vector 
-  m_x = np.mean(x) 
-  m_y = np.mean(y) 
-  
-  # calculating cross-deviation and deviation about x 
-  SS_xy = np.sum(y*x) - n*m_y*m_x 
-  SS_xx = np.sum(x*x) - n*m_x*m_x 
-  
-  # calculating regression coefficients 
-  b_1 = SS_xy / SS_xx 
-  b_0 = m_y - b_1*m_x 
-  
-  return (b_0, b_1)
+
 
 def opgave_2_5(opgave):
     x_i = [0.41, 0.46, 0.44, 0.47, 0.42, 0.39, 0.41, 0.44, 0.43, 0.44]
@@ -351,19 +335,68 @@ def opgave_2_5(opgave):
         variance = (1/(n-2))*sum(error)
         print(variance)
 
-opgave_2_5('d')
+#opgave_2_5('d')
 
 
+def opgave_3_1():
+    mean = 210
+    std_dev = 35
+    sample_mean = 200
+
+    n = 25
+    T_25 = T_Test(sample_mean, mean, n, std_dev)
+    Z = Z_score(0.95)
+    #T_Ting = t(n-1).ppf(T)
+    P = t(n-1).cdf(T_25)
+    print('T_25=', T_25)
+    print('Z =', Z)
+    print('P =', P)
+
+    n = 64
+    T_64 = T_Test(sample_mean, mean, n, std_dev)
+    Z = Z_score(0.95)
+    #T_Ting = t(n-1).ppf(T)
+    P = t(n-1).cdf(T_64)
+    print('T_64=', T_64)
+    print('Z =', Z)
+    print('P =', P)
+
+#opgave_3_1()
+''' (Israels interpretation) In this case, we cannot reject H0 when the sample size is n = 25. This is because, even
+though the sample mean is lower than the value of µ0 > µ^n, this outcome is not so extreme
+with µ0 and a relatively small sample size of 25 as indicated by the p-value of 0.0766.
+As the sample size increases, it would be expected that extreme outcomes in the sample mean
+happen more rarely because the standard deviation of the sample mean std_dev/√
+n decreases as n
+increases. However, this is not the case and the outcome for a sample mean of 200 is considered
+an extreme case as indicated by the p-value of 0.0111. Therefore, H0 is rejected for n = 64 but
+not for n = 25.'''
+
+def opgave_3_2():
+    n = 500
+    k = 138
+    p_0 = 0.255
+    N_led = []
+    p_0_i = []
+    _1_p_0 = []
+    for i in range(138, 500):
+        N_led.append(math.factorial(n) / (math.factorial(i)*math.factorial(n-i)))
+        p_0_i.append(p_0 ** i)
+        _1_p_0.append((1-p_0)**(n-i))
+
+    perm = 0
+    for i in range(len(N_led)):
+        temp = N_led[i]*p_0_i[i]*_1_p_0[i]
+        perm += temp 
+
+    print(perm)
+    #print(perm)
+    '''Der er en anden løsning til denne som jeg ikke helt har fået lavet endnu'''
+#opgave_3_2()
 
 
-
-
-
-
-
-
-
-
+#def opgave_3_3():
+    
 
 
 
