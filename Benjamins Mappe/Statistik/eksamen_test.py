@@ -17,15 +17,15 @@ from Stats_funcs import mean_csv,plt_Hist_norm,plt_PFD_GAUS,binomial_pmf, plt_Hi
 
 #x_i = [0.41, 0.46, 0.44, 0.47, 0.42, 0.39, 0.41, 0.44, 0.43, 0.44]
 #y_i = [1850, 2620, 2340, 2690, 2160, 1760, 2500, 2750, 2730, 3120]
-x_i = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019]
-y_i = [7.20, 7.33, 7.32, 7.24, 7.24, 7.23, 7.03, 7.03, 7.04, 7.06]
+x_i = [0.1, 0.2, 0.5, 0.7, 0.9]
+y_i = [0.43, 0.52, 0.13, 1.73, 2.01]
 
 np_x_i = np.asarray(x_i, dtype=np.float32)
 np_y_i = np.asarray(y_i, dtype=np.float32)
 
 b_0, b_1 = estimate_coef(np_x_i, np_y_i)
 print('b_o =',b_0, 'b_1 =', b_1)
-x_speccific = 2020
+x_speccific = 1
 print('Result in x=', x_speccific, 'is y=', b_0+b_1*x_speccific)
 y = []
 for i in range(len(x_i)):
