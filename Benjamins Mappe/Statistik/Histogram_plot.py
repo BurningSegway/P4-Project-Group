@@ -25,7 +25,7 @@ def opgave_1():
     #df.plot.hist()
     plt.show()
 
-
+opgave_1()
 
 
 #Exercise 2: Simulate rolling a fair dice n times.
