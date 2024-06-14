@@ -12,10 +12,11 @@ from drone_msgs.msg import Control
 
 class MinimalPublisher(Node):
     def __init__(self):
-        super().__init__('keyboard_publisher')
+        super().__init__('main_control')
         self.publisher_ = self.create_publisher(Control, 'control_input', 10)
         self.kill = self.create_publisher(Bool, 'control_input/kill', 10)
         self.goal_pub = self.create_publisher(Goal, 'control_input/goal', 10)
+        self.capture = self.create_publisher(Bool, 'camera/command', 10)
 
         self.throttle_sub = self.create_subscription(Float64, 'control_input/z', self.throttle_assign, 10)
         self.yaw_sub = self.create_subscription(Float64, 'control_input/yaw', self.yaw_assign, 10)
@@ -41,9 +42,9 @@ class MinimalPublisher(Node):
         self.yaw = 0
         self.kill_state = False
 
-        self.goal_x = [0, 1, 0, 0]
-        self.goal_y = [0, 0, 0, 1]
-        self.goal_z = [0.7, 0.7, 0.7, 0.7]
+        self.goal_x = [0,    0,  1,  1,  1,  0,  0]
+        self.goal_y = [0,    1,  1,  0, -1, -1,  0]
+        self.goal_z = [1,    1,  1,  2,  2,  1,  1]
 
         self.i = 0
 
@@ -75,7 +76,6 @@ class MinimalPublisher(Node):
                 self.roll = 0
                 self.throttle = 0
                 self.yaw = 0
-                running = False
 
             elif event.type == KEYDOWN:
                 # Check for specific key presses
@@ -102,6 +102,13 @@ class MinimalPublisher(Node):
                     self.roll = 0
                     self.throttle = 0
                     self.yaw = 0
+
+                if event.key == K_n:
+                    b = Bool()
+                    b.data = True
+                    self.capture.publish(b)
+                    b.data = False
+                    self.capture.publish(b)
         
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w]:
@@ -160,15 +167,15 @@ class MinimalPublisher(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    keyboard_publisher = MinimalPublisher()
+    main_control = MinimalPublisher()
 
-    rclpy.spin(keyboard_publisher)
+    rclpy.spin(main_control)
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically
     # when the garbage collector destroys the node object)
     pygame.quit()
-    keyboard_publisher.destroy_node()
+    main_control.destroy_node()
     rclpy.shutdown()
 
 

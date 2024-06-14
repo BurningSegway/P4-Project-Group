@@ -19,7 +19,7 @@ from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 
 
-from std_msgs.msg import String
+from std_msgs.msg import Bool
 from sensor_msgs.msg import Image
 
 
@@ -27,12 +27,12 @@ class MinimalPublisher(Node):
 
     def __init__(self):
         super().__init__('image_pupblisher')
-        self.publisher_ = self.create_publisher(Image, 'camera/image', 10)
-        timer_period = 0.03  # seconds
+        self.publisher_ = self.create_publisher(Image, 'camera/image', 1)
+        self.command_sub = self.create_subscription(Bool, 'camera/command', self.capture, 10)
 
         self.bridge = CvBridge()
 
-        cam_port = 0
+        cam_port = 1
         self.cam = cv.VideoCapture(cam_port)
         result, image = self.cam.read()
 
@@ -40,29 +40,25 @@ class MinimalPublisher(Node):
             self.get_logger().info("Camera initialized!")
         else:
             self.get_logger().info("Camera not initialized!")
-        
-        self.timer = self.create_timer(timer_period, self.timer_callback)
 
-    def timer_callback(self):
+    def capture(self, msg):
 
-        if self.cam.isOpened():
+        if self.cam.isOpened() and msg.data == 1:
             _, image = self.cam.read()
 
-            image = cv.resize(image, (400, 250))
-
             #Lav billede om til sensor_msg Image
-            msg = Image()
-            msg.header.stamp = Node.get_clock(self).now().to_msg()
-            msg.header.frame_id = "Webcam"
-            msg.height = np.shape(image)[0]
-            msg.width = np.shape(image)[1]
-            msg.encoding = "bgr8"
-            msg.is_bigendian = False
-            msg.step = np.shape(image)[2] * np.shape(image)[1]
-            msg.data = np.array(image).tobytes()
+            i = Image()
+            i.header.stamp = Node.get_clock(self).now().to_msg()
+            i.header.frame_id = "Webcam"
+            i.height = np.shape(image)[0]
+            i.width = np.shape(image)[1]
+            i.encoding = "bgr8"
+            i.is_bigendian = False
+            i.step = np.shape(image)[2] * np.shape(image)[1]
+            i.data = np.array(image).tobytes()
 
             #Publish billede
-            self.publisher_.publish(msg)
+            self.publisher_.publish(i)
             self.get_logger().info("Image pupblished")
 
 

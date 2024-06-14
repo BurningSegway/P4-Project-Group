@@ -43,11 +43,6 @@ class MinimalPublisher(Node):
 
         self.integral += x_err * dt
 
-
-
-        self.integral += x_err * dt
-
-
         control_sig = (x_err * K_p) + (K_i * self.integral) + (K_D*(x_err-self.prev_err)/dt)   #Output from the second controller, which the drone recieves. Should also maybe include the term that makes the drone hover
 
         if control_sig > 300:

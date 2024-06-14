@@ -4,6 +4,7 @@ from rclpy.node import Node
 from std_msgs.msg import Float64
 from std_msgs.msg import Bool
 from drone_msgs.msg import Pos
+from drone_msgs.msg import Goal
 
 class MinimalPublisher(Node):
 
@@ -12,15 +13,21 @@ class MinimalPublisher(Node):
         self.publisher_ = self.create_publisher(Float64, 'control_input/z', 10)
         self._subscription = self.create_subscription(Pos, 'drone/pose', self.callback, 10)
         self.kill_command = self.create_subscription(Bool, 'control_input/kill', self.kill, 10)
+        self.goal_sub = self.create_subscription(Goal, 'control_input/goal', self.goal_assign, 10)
+
+        self.z_goal = 1
+
         self.integral = 0
 
         self.get_logger().info("--- z_controller launched")
 
+    def goal_assign(self, msg):
+        self.z_goal = msg.z_goal
+        
+
     def callback(self, msg):
 
         out = Float64()
-
-        z_goal = 1
 
         dt = 0.01
 
@@ -34,7 +41,7 @@ class MinimalPublisher(Node):
 
         
 
-        pos_err = z_goal - z_pos    #positional error
+        pos_err = self.z_goal - z_pos    #positional error
         outer_sig = pos_err * K_p_outer #Output from first controller
         vel_err = outer_sig - z_vel #The error signal to the second controller
 
@@ -47,13 +54,15 @@ class MinimalPublisher(Node):
         if inner_sig > 800:
             inner_sig = 800
 
-        if inner_sig < 200:
-            inner_sig = 200
+        if inner_sig < 550:
+            inner_sig = 550
         
         out.data = float(inner_sig)
 
         self.publisher_.publish(out)
         print(f'Outer control signal: {outer_sig}\n Inner control signal: {inner_sig}\n Position error: {pos_err}\n Height: {z_pos}')
+        self.get_logger().info(f"Goal: {self.z_goal}")
+
 
     def kill(self, msg):
         if msg.data == 1:

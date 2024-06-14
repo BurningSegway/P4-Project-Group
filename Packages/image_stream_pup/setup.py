@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'puplisher = image_stream_pup.image_puplisher:main'
+            'puplisher = image_stream_pup.image_puplisher:main',
+            'subscriber = image_stream_pup.image_subscriber:main'
         ],
     },
 )
