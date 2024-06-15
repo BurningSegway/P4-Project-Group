@@ -28,6 +28,9 @@ setup(
             'yaw_controller = regulators.yaw_controller:main',
             'x_controller = regulators.x_controller:main',
             'y_controller = regulators.y_controller:main',
+            'x_casc = regulators.cascade_x_controller:main',
+            'y_casc = regulators.cascade_y_controller:main',
+            'yaw_casc = regulators.cascade_yaw_controller:main',
         ],
     },
 )

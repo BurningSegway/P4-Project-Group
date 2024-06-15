@@ -24,7 +24,7 @@ class MinimalPublisher(Node):
         self.get_logger().info("-|- waiting on connection -|-")
 
         
-        HOST = "192.168.1.34"
+        HOST = "192.168.1.69"
         PORT = 65432
 
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -42,6 +42,8 @@ class MinimalPublisher(Node):
         self.rot_e4 = 0.0
 
         self.yaw = 0.0
+        self.yaw_vel = 0.0
+        self.prev_yaw = 0.0
 
         self.vel_x = 0.0
         self.vel_y = 0.0
@@ -97,7 +99,12 @@ class MinimalPublisher(Node):
                 t.e3 = self.rot_e3
                 t.e4 = self.rot_e4
 
-                t.yaw = quat_2_yaw(self.rot_e1, self.rot_e2, self.rot_e3, self.rot_e4)
+                self.yaw = quat_2_yaw(self.rot_e1, self.rot_e2, self.rot_e3, self.rot_e4)
+                t.yaw = self.yaw
+                self.yaw_vel = (self.yaw-self.prev_yaw)/0.01
+                t.yaw_vel = self.yaw_vel
+
+                self.prev_yaw = self.yaw
 
                 t.vel_x = self.vel_x
                 t.vel_y = self.vel_y
@@ -107,6 +114,7 @@ class MinimalPublisher(Node):
 
                 # Send the transformation
                 self.publisher_.publish(t)
+
 def quat_2_yaw(x, y, z, w):
      
         t3 = +2.0 * (w * z + x * y)

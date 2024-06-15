@@ -61,7 +61,7 @@ class MinimalPublisher(Node):
 
         self.publisher_.publish(out)
         print(f'Outer control signal: {outer_sig}\n Inner control signal: {inner_sig}\n Position error: {pos_err}\n Height: {z_pos}')
-        self.get_logger().info(f"Goal: {self.z_goal}")
+        #self.get_logger().info(f"Goal: {self.z_goal}")
 
 
     def kill(self, msg):

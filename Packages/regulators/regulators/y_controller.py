@@ -36,7 +36,6 @@ class MinimalPublisher(Node):
 
         y_err = y_pos - self.y_goal
 
-        #Cascade controller
         K_p = 285 #controller gains #300
         K_i = 3
         K_D = 210                  #50
@@ -57,7 +56,7 @@ class MinimalPublisher(Node):
 
         if self.y_goal != 9999:
             self.publisher_.publish(out)
-            #self.get_logger().info(f"Goal: {self.x_goal}")
+            self.get_logger().info(f"Goal: {control_sig}")
 
             print(f'Control signal: {control_sig}\n Yaw error: {y_err}\n Yaw: {y_pos}')
 
