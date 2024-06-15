@@ -13,7 +13,7 @@ def opgave_1_1(subtask):
     #find keys
     print(data.keys())
     #Ekstraher kolonnen med den relevante data
-    latency_data = data[" pop_latency[ms] "]
+    latency_data = [1090, 1130, 1122, 1101, 1110]
 
     #Find gaussiske værdier
     mean, variance, std_dev = mean_csv(latency_data)
@@ -339,29 +339,21 @@ def opgave_2_5(opgave):
 
 
 def opgave_3_1():
-    mean = 210
-    std_dev = 35
-    sample_mean = 200
+    mean = 1120
+    std_dev = 10
+    sample_mean = 1110.6
 
-    n = 25
+    n = 5
     T_25 = T_Test(sample_mean, mean, n, std_dev)
-    Z = Z_score(0.95)
+    Z = Z_score(0.91)
     #T_Ting = t(n-1).ppf(T)
     P = t(n-1).cdf(T_25)
     print('T_25=', T_25)
     print('Z =', Z)
     print('P =', P)
 
-    n = 64
-    T_64 = T_Test(sample_mean, mean, n, std_dev)
-    Z = Z_score(0.95)
-    #T_Ting = t(n-1).ppf(T)
-    P = t(n-1).cdf(T_64)
-    print('T_64=', T_64)
-    print('Z =', Z)
-    print('P =', P)
 
-#opgave_3_1()
+opgave_3_1()
 ''' (Israels interpretation) In this case, we cannot reject H0 when the sample size is n = 25. This is because, even
 though the sample mean is lower than the value of µ0 > µ^n, this outcome is not so extreme
 with µ0 and a relatively small sample size of 25 as indicated by the p-value of 0.0766.
