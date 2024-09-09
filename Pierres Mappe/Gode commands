@@ -1,0 +1,4 @@
+#Søg for devices på netværket
+sudo arp-scan -l --interface=wlp0s20f3
+sudo dmesg -w
+nmcli --get-values GENERAL.DEVICE,GENERAL.TYPE device show

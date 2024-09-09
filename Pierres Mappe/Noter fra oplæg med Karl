@@ -1,0 +1,19 @@
+conpleks - kontrolbox, arbejder også med ROS, fra Struer
+Kontor - Frederikshavnsvej i Hjørring
+
+ROS services - Trigger services, sender ikke noget data til den, men den kører bare.
+PlotJuggler - Skide smart
+
+Behavior Trees - Er det skide smart? Ja, det tror jeg. Finite state machine, det har vi vist haft om i Frameworks. Behavior tree - Groot 2, visualizer til behavior trees cpp lavet med noget xml?
+
+Xsens IMU - Den er orange, og ret god, og meget dyr
+
+RPI agtigt modul. STM32 RTK system, holder styr på motorkontrol skal være realtid - booter og tjekker om der er USB eller update - starter en systemd service, som kalder et ROS launch scripts. De bruger lifecycle nodes, så når alle noderne er allokeret, og initeret, så bliver de aktiveret, sådan at alle ting de er klar, sådan at der ikke er noget som starter hvis de ikke er klar.
+
+Finde dokumentation - ROSWiki ok til det basale.
+Index.ros.org - Udgivet pakker til ROS + Dokumentation + Kilde kode
+Answers.ros.org - robotics.stackoverflow
+
+Nødstop - Nødstop bliver håndteret på et lavere lag på realtidssystemet, ROS bliver notificeret men nødstoppet bliver håndteret dernede og bare cutter strømmen. Anders Lacour droner.
+
+
